@@ -20,11 +20,13 @@ all: check-CLOUD check-IMAGE_NAME
 	  $(MAKE) deploy; \
 	fi
 
-deploy: $(IMAGE) check-CLOUD check-IMAGE_NAME
+deploy: image check-CLOUD check-IMAGE_NAME
 	$(OPENSTACK) --os-cloud=$(CLOUD) image create \
 	  --file "$(IMAGE)" --disk-format qcow2 --shared \
 	  --tag "Alpine $(ALPINE_VERSION)" --tag "Docker" --tag "Swarm" \
 	  "$(IMAGE_NAME)"
+
+image: $(IMAGE)
 
 $(IMAGE): $(TEMPLATE) $(SOURCES)
 	rm -rf $(BUILD_DIR)
@@ -39,4 +41,4 @@ clean:
 cloud-clean: check-CLOUD check-IMAGE_NAME
 	$(OPENSTACK) --os-cloud=$(CLOUD) image delete "$(IMAGE_NAME)" || true
 
-.PHONY: all deploy clean cloud-clean
+.PHONY: all image deploy clean cloud-clean

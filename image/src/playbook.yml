@@ -1,0 +1,32 @@
+---
+- name: Provision Image
+  hosts: default
+  become: false
+  gather_facts: false
+
+  tasks:
+  - name: Bootstrap Python 3
+    raw: apk add python3
+
+  - name: Set apk repositories
+    template:
+      src: apk-repositories.j2
+      dest: /etc/apk/repositories
+
+  - name: Install cloud-init, Netdata and Docker
+    community.general.apk:
+      name:
+      - cloud-init
+      - netdata
+      - docker
+      update_cache: true
+
+  - name: Create Docker configuration directory
+    file:
+      state: directory
+      path: /etc/docker
+
+  - name: Configure Docker deamon
+    copy:
+      src: docker.json
+      dest: /etc/docker/daemon.json
