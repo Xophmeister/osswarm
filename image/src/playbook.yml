@@ -26,7 +26,30 @@
       state: directory
       path: /etc/docker
 
-  - name: Configure Docker deamon
+  - name: Configure Docker daemon
     copy:
       src: docker.json
       dest: /etc/docker/daemon.json
+
+  - name: Configure Netdata
+    copy:
+      src: netdata.conf
+      dest: /etc/netdata/netdata.conf
+
+  # TODO Configure cloud-init
+
+  - name: Enable services
+    service:
+      name: "{{ item }}"
+      enabled: true
+    loop:
+    - netdata
+    - docker
+    # - cloud-init
+
+  # TODO Uncomment after development
+  # - name: Prevent root SSH login
+  #   lineinfile:
+  #     path: /etc/ssh/sshd_config
+  #     line: "PermitRootLogin yes"
+  #     state: absent
