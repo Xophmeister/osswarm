@@ -15,8 +15,8 @@ EOF
 echo "root:alpine" | chpasswd
 
 setup-timezone -z UTC
-
 setup-apkrepos -1
+setup-ntp -c chrony
 
 apk add --quiet openssh
 rc-update --quiet add sshd default
