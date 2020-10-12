@@ -20,7 +20,7 @@ all: check-CLOUD check-IMAGE_NAME
 	  $(MAKE) deploy; \
 	fi
 
-deploy: image check-CLOUD check-IMAGE_NAME
+deploy: image check-CLOUD check-IMAGE_NAME check-ALPINE_VERSION
 	$(OPENSTACK) --os-cloud=$(CLOUD) image create \
 	  --file "$(IMAGE)" --disk-format qcow2 --shared \
 	  --tag "Alpine $(ALPINE_VERSION)" --tag "Docker" --tag "Swarm" \
@@ -28,7 +28,7 @@ deploy: image check-CLOUD check-IMAGE_NAME
 
 image: $(IMAGE)
 
-$(IMAGE): $(TEMPLATE) $(SOURCES)
+$(IMAGE): $(TEMPLATE) $(SOURCES) check-ALPINE_VERSION check-ALPINE_FLAVOUR check-ARCH
 	rm -rf $(BUILD_DIR)
 	$(PACKER) build -var "alpine_version=$(ALPINE_VERSION)" \
 	                -var "alpine_flavour=$(ALPINE_FLAVOUR)" \

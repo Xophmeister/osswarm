@@ -1,10 +1,11 @@
-CLOUD ?= hgi
-NAME  ?= swarm
-ARCH  ?= x86_64
+include Makefile.inc
 
-IMAGE_NAME = $(NAME)-$(ARCH)
+NAME ?= osswarm
+ARCH ?= x86_64
 
-image:
+IMAGE_NAME = osswarm-$(ARCH)
+
+image: check-ARCH check-CLOUD check-IMAGE_NAME
 	$(MAKE) ARCH=$(ARCH) \
 	        CLOUD=$(CLOUD) \
 	        IMAGE_NAME=$(IMAGE_NAME) \
@@ -13,7 +14,7 @@ image:
 clean:
 	$(MAKE) -C image $@
 
-cloud-clean:
+cloud-clean: check-CLOUD check-IMAGE_NAME
 	$(MAKE) CLOUD=$(CLOUD) \
 	        IMAGE_NAME=$(IMAGE_NAME) \
 	        -C image $@
