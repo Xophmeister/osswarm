@@ -30,7 +30,8 @@ image: $(IMAGE)
 
 $(IMAGE): $(TEMPLATE) $(SOURCES) check-ALPINE_VERSION check-ALPINE_FLAVOUR check-ARCH
 	rm -rf $(BUILD_DIR)
-	$(PACKER) build -var "alpine_version=$(ALPINE_VERSION)" \
+	$(PACKER) build -var "platform=$(shell uname -s)" \
+	                -var "alpine_version=$(ALPINE_VERSION)" \
 	                -var "alpine_flavour=$(ALPINE_FLAVOUR)" \
 	                -var "architecture=$(ARCH)" \
 	                "$<"
