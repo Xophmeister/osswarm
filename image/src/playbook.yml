@@ -16,40 +16,42 @@
   - name: Install cloud-init, Netdata and Docker
     community.general.apk:
       name:
+      - openssh-server-pam
       - cloud-init
       - netdata
       - docker
       update_cache: true
 
-  - name: Create Docker configuration directory
-    file:
-      state: directory
-      path: /etc/docker
-
-  - name: Configure Docker daemon
+  - name: Configure SSH
     copy:
-      src: docker.json
-      dest: /etc/docker/daemon.json
+      src: sshd_config
+      dest: /etc/ssh/sshd_config
+
+  - name: Configure cloud-init
+    copy:
+      src: cloud.cfg
+      dest: /etc/cloud/cloud.cfg
 
   - name: Configure Netdata
     copy:
       src: netdata.conf
       dest: /etc/netdata/netdata.conf
 
-  # TODO Configure cloud-init
+  - name: Create Docker configuration directory
+    file:
+      state: directory
+      path: /etc/docker
+
+  - name: Configure Docker
+    copy:
+      src: docker.json
+      dest: /etc/docker/daemon.json
 
   - name: Enable services
     service:
       name: "{{ item }}"
       enabled: true
     loop:
+    - cloud-init
     - netdata
     - docker
-    # - cloud-init
-
-  # TODO Uncomment after development
-  # - name: Prevent root SSH login
-  #   lineinfile:
-  #     path: /etc/ssh/sshd_config
-  #     line: "PermitRootLogin yes"
-  #     state: absent
