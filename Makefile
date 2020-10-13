@@ -12,6 +12,9 @@ image: check-ARCH check-CLOUD check-IMAGE_NAME
 	        IMAGE_NAME=$(IMAGE_NAME) \
 	        -C $@
 
+help: README.md
+	@ less $<
+
 clean:
 	$(MAKE) -C image $@
 
@@ -20,4 +23,4 @@ cloud-clean: check-CLOUD check-IMAGE_NAME
 	        IMAGE_NAME=$(IMAGE_NAME) \
 	        -C image $@
 
-.PHONY: image clean cloud-clean
+.PHONY: image help clean cloud-clean
