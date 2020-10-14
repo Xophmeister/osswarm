@@ -1,4 +1,4 @@
-include Makefile.inc
+include common.make
 
 NAME ?= $(shell whoami)
 ARCH ?= x86_64

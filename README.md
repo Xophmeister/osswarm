@@ -7,19 +7,17 @@ Build and deploy a Docker Swarm cluster to OpenStack.
     make CLOUD=${OS_CLOUD}
 
 Build and deploy a Docker Swarm to the given OpenStack project, per the
-`clouds.yaml` configuration.
-
-By default, the cluster will be named per your username; this can be
-overridden with the `NAME` Make variable. Other Make variables can be
-set to fine-tune the cluster; please see the appropriate
+`clouds.yaml` configuration. Other Make variables can be set to
+fine-tune the cluster; please see the appropriate
 [documentation](#build-process) below.
 
 Other Make targets are available:
 
-* **`clean`** \
-  Clean the local build state
 * **`cloud-clean CLOUD=${OS_CLOUD}`** \
-  Destroy a deployed Docker Swarm
+  Destroy a deployed Docker Swarm and all its related infrastructure
+* **`clean`** \
+  Clean the local build state, desynchronising it from any cloud state
+  (i.e., run `cloud-clean` first)
 * **`help`** \
   This documentation
 
@@ -75,6 +73,12 @@ then be deployed to the OpenStack project as `osswarm-${ARCH}` (e.g.,
 `osswarm-x86_64`).
 
 ### Infrastructure
+
+The following Make variables are available to `infrastructure/Makefile`:
+
+* **`NAME`** \
+  The name used for the cluster infrastructure (defaults to current
+  username)
 
 <!-- Write me... -->
 

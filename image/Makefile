@@ -1,4 +1,4 @@
-include ../Makefile.inc
+include ../common.make
 
 ARCH ?= x86_64
 ALPINE_VERSION ?= 3.12.0
