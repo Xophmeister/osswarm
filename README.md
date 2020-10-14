@@ -25,6 +25,12 @@ The build is optimised for the OpenStack environment provided at the
 OpenStack environments by focusing on the following
 [configuration](#sanger-specific-configuration).
 
+Note that while Make is used to build and deploy the cluster, there will
+be a disconnect between cloud and local build artefacts. No attempt is
+made to synchronise these. For example, once an image is deployed,
+changes to its sources will not trigger a full rebuild until `make
+cloud-clean` is manually invoked.
+
 <!-- ## Monitoring -->
 
 ## Dependencies
@@ -62,8 +68,11 @@ The image will be built locally as `image/build/image.qcow2`. It will
 then be deployed to the OpenStack project as `osswarm-${ARCH}` (e.g.,
 `osswarm-x86_64`).
 
-<!-- ## Infrastructure -->
-<!-- ## Orchestration -->
+### Infrastructure
+
+<!-- Write me... -->
+
+<!-- ### Orchestration -->
 
 ## Sanger-Specific Configuration
 

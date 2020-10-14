@@ -16,7 +16,7 @@ TEMPLATE = image.pkr.hcl
 SOURCES = $(wildcard src/*)
 
 all: check-CLOUD check-IMAGE_NAME
-	@ if ! $(OPENSTACK) --os-cloud=$(CLOUD) image show "$(IMAGE_NAME)" >/dev/null 2>&1; then \
+	if ! $(OPENSTACK) --os-cloud=$(CLOUD) image show "$(IMAGE_NAME)" >/dev/null 2>&1; then \
 	  $(MAKE) deploy; \
 	fi
 
@@ -43,3 +43,4 @@ cloud-clean: check-CLOUD check-IMAGE_NAME
 	$(OPENSTACK) --os-cloud=$(CLOUD) image delete "$(IMAGE_NAME)" || true
 
 .PHONY: all image deploy clean cloud-clean
+.SILENT: all

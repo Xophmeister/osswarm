@@ -6,21 +6,22 @@ ARCH ?= x86_64
 # The image is the same, regardless of the name, so canonicalise it
 IMAGE_NAME = osswarm-$(ARCH)
 
-image: check-ARCH check-CLOUD check-IMAGE_NAME
-	$(MAKE) ARCH=$(ARCH) \
-	        CLOUD=$(CLOUD) \
-	        IMAGE_NAME=$(IMAGE_NAME) \
-	        -C $@
+SOURCES = $(wildcard */)
+
+infrastructure: check-CLOUD image
+	$(MAKE) -C $@
+
+image: check-CLOUD
+	$(MAKE) -C $@
 
 help: README.md
-	@ less $<
+	less $<
 
-clean:
-	$(MAKE) -C image $@
+clean cloud-clean:
+	for target in $(SOURCES); do \
+	  $(MAKE) -C $${target} $@; \
+	done
 
-cloud-clean: check-CLOUD check-IMAGE_NAME
-	$(MAKE) CLOUD=$(CLOUD) \
-	        IMAGE_NAME=$(IMAGE_NAME) \
-	        -C image $@
-
-.PHONY: image help clean cloud-clean
+.PHONY: infrastructure image help clean cloud-clean
+.SILENT: help clean cloud-clean
+.EXPORT_ALL_VARIABLES:
