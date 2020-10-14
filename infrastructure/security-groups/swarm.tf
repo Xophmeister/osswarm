@@ -13,7 +13,7 @@ resource "openstack_networking_secgroup_v2" "osswarm-worker" {
 # FIXME Is the full Cartesian product of rules required for the Docker
 # Swarm manager and workers?...
 
-module "manager2manager" {
+module "manager-to-manager" {
   source = "./swarm"
 
   cloud = var.cloud
@@ -21,7 +21,7 @@ module "manager2manager" {
   to = openstack_networking_secgroup_v2.osswarm-manager.id
 }
 
-module "manager2worker" {
+module "manager-to-worker" {
   source = "./swarm"
 
   cloud = var.cloud
@@ -29,7 +29,7 @@ module "manager2worker" {
   to = openstack_networking_secgroup_v2.osswarm-worker.id
 }
 
-module "worker2manager" {
+module "worker-to-manager" {
   source = "./swarm"
 
   cloud = var.cloud
@@ -37,7 +37,7 @@ module "worker2manager" {
   to = openstack_networking_secgroup_v2.osswarm-manager.id
 }
 
-module "worker2worker" {
+module "worker-to-worker" {
   source = "./swarm"
 
   cloud = var.cloud
