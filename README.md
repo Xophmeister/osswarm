@@ -7,8 +7,11 @@ Build and deploy a Docker Swarm cluster to OpenStack.
     make CLOUD=${OS_CLOUD}
 
 Build and deploy a Docker Swarm to the given OpenStack project, per the
-`clouds.yaml` configuration. Other Make variables can be set to
-fine-tune the cluster; please see the appropriate
+`clouds.yaml` configuration.
+
+By default, the cluster will be named per your username; this can be
+overridden with the `NAME` Make variable. Other Make variables can be
+set to fine-tune the cluster; please see the appropriate
 [documentation](#build-process) below.
 
 Other Make targets are available:
@@ -42,6 +45,9 @@ cloud-clean` is manually invoked.
 * [Ansible][ansible] (tested with 2.9.13)
 * Ansible [`community.general` modules][ansible-modules] (tested with
   1.2.0)
+* [Terraform][terraform] (tested with 0.13.4)
+* Terraform [OpenStack provider][terraform-openstack] (tested with
+  1.32.0)
 
 ## Build Process
 
@@ -91,7 +97,6 @@ The following *may* need to be changed for a general OpenStack cloud:
   - [ ] SSH key
   - [ ] Networking
     - [ ] Network
-    - [ ] Security groups
     - [ ] Floating IP
   - [ ] Compute
   - [ ] Load Balancer
@@ -104,15 +109,16 @@ The following *may* need to be changed for a general OpenStack cloud:
 - [ ] Documentation
 
 <!-- References -->
-[alpine]:           https://alpinelinux.org/
-[ansible-modules]:  https://galaxy.ansible.com/community/general
-[ansible]:          https://www.ansible.com/
-[cloud-init]:       https://cloud-init.io/
-[docker]:           https://www.docker.com/
-[make]:             https://www.gnu.org/software/make
-[netdata]:          https://www.netdata.cloud/
-[openstack-cli]:    https://docs.openstack.org/python-openstackclient
-[packer]:           https://www.packer.io/
-[qemu]:             https://www.qemu.org/
-[sanger]:           https://www.sanger.ac.uk/
-[terraform]:        https://www.terraform.io/
+[alpine]:              https://alpinelinux.org/
+[ansible-modules]:     https://galaxy.ansible.com/community/general
+[ansible]:             https://www.ansible.com/
+[cloud-init]:          https://cloud-init.io/
+[docker]:              https://www.docker.com/
+[make]:                https://www.gnu.org/software/make
+[netdata]:             https://www.netdata.cloud/
+[openstack-cli]:       https://docs.openstack.org/python-openstackclient
+[packer]:              https://www.packer.io/
+[qemu]:                https://www.qemu.org/
+[sanger]:              https://www.sanger.ac.uk/
+[terraform]:           https://www.terraform.io/
+[terraform-openstack]: https://registry.terraform.io/providers/terraform-provider-openstack/openstack

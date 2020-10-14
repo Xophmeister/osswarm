@@ -1,6 +1,6 @@
 include Makefile.inc
 
-NAME ?= osswarm
+NAME ?= $(shell whoami)
 ARCH ?= x86_64
 
 # The image is the same, regardless of the name, so canonicalise it

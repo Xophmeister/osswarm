@@ -1,0 +1,2 @@
+variable "cloud" {}
+variable "cluster" {}
