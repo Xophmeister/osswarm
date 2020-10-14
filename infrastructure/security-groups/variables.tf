@@ -1,2 +1,1 @@
-variable "cloud" {}
 variable "cluster" {}
