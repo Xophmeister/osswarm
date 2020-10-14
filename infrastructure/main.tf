@@ -1,11 +1,3 @@
-terraform {
-  required_version = ">= 0.13"
-}
-
-variable "cloud" {
-  description = "OpenStack cloud identifier, per clouds.yaml"
-}
-
 variable "cluster" {
   description = "Name for the cluster infrastructure"
 }

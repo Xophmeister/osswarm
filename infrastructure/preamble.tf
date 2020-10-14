@@ -9,7 +9,9 @@ terraform {
   required_version = ">= 0.13"
 }
 
-variable "cloud" {}
+variable "cloud" {
+  description = "OpenStack cloud identifier, per clouds.yaml"
+}
 
 provider "openstack" {
   cloud = var.cloud
