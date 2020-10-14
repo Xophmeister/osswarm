@@ -44,3 +44,10 @@ module "worker2worker" {
   from = openstack_networking_secgroup_v2.osswarm-worker.id
   to = openstack_networking_secgroup_v2.osswarm-worker.id
 }
+
+output "swarm" {
+  value = {
+    manager = openstack_networking_secgroup_v2.osswarm-manager.id
+    worker = openstack_networking_secgroup_v2.osswarm-worker.id
+  }
+}
