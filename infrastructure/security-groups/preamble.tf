@@ -6,3 +6,7 @@ terraform {
   }
   required_version = ">= 0.13"
 }
+
+provider "openstack" {
+  cloud = var.cloud
+}
