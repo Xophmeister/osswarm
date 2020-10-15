@@ -16,7 +16,7 @@ allowed.
 ***********************************************************************/
 
 # Management Plane
-resource "openstack_networking_secgroup_rule_v2" "osswarm-management" {
+resource "openstack_networking_secgroup_rule_v2" "osswarm-management-plane" {
   direction         = "ingress"
   ethertype         = "IPv4"
   description       = "Cluster management and Raft synchronisation"
@@ -28,7 +28,7 @@ resource "openstack_networking_secgroup_rule_v2" "osswarm-management" {
 }
 
 # Control Plane
-resource "openstack_networking_secgroup_rule_v2" "osswarm-control" {
+resource "openstack_networking_secgroup_rule_v2" "osswarm-control-plane" {
   direction         = "ingress"
   ethertype         = "IPv4"
   description       = "Control plane TCP"
@@ -40,7 +40,7 @@ resource "openstack_networking_secgroup_rule_v2" "osswarm-control" {
 }
 
 # Data Plane (overlay VXLAN)
-resource "openstack_networking_secgroup_rule_v2" "osswarm-data" {
+resource "openstack_networking_secgroup_rule_v2" "osswarm-data-plane" {
   direction         = "ingress"
   ethertype         = "IPv4"
   description       = "Data plane UDP"
@@ -52,7 +52,7 @@ resource "openstack_networking_secgroup_rule_v2" "osswarm-data" {
 }
 
 # Security Plane
-resource "openstack_networking_secgroup_rule_v2" "osswarm-security" {
+resource "openstack_networking_secgroup_rule_v2" "osswarm-security-plane" {
   direction         = "ingress"
   ethertype         = "IPv4"
   description       = "Security plane ESP"

@@ -13,7 +13,7 @@ fine-tune the cluster; please see the appropriate
 
 Other Make targets are available:
 
-* **`cloud-clean CLOUD=${OS_CLOUD}`** \
+* **`cloud-clean`** \
   Destroy a deployed Docker Swarm and all its related infrastructure
 * **`clean`** \
   Clean the local build state, desynchronising it from any cloud state
@@ -37,15 +37,17 @@ cloud-clean` is manually invoked.
 ## Dependencies
 
 * [GNU Make][make]
+* [OpenSSH][openssh]
 * [Openstack CLI][openstack-cli] (tested with 5.4.0) and a `clouds.yaml`
 * [Packer][packer] (tested with 1.6.4)
 * [QEMU][qemu] (tested with 5.1.0)
 * [Ansible][ansible] (tested with 2.9.13)
-* Ansible [`community.general` modules][ansible-modules] (tested with
-  1.2.0)
+  * Ansible [`community.general` modules][ansible-modules] (tested with
+    1.2.0)
 * [Terraform][terraform] (tested with 0.13.4)
-* Terraform [OpenStack provider][terraform-openstack] (tested with
-  1.32.0)
+  * Terraform [OpenStack provider][terraform-openstack] (tested with
+    1.32.0)
+  * Terraform [local provider][terraform-local] (tested with 2.0.0)
 
 ## Build Process
 
@@ -62,11 +64,11 @@ The following Make variables are available to `image/Makefile`:
 
 * **`ARCH`** \
   The CPU architecture used by the image and the OpenStack environment
-  (default `x86_64`)
+  (defaults to `x86_64`)
 * **`ALPINE_VERSION`** \
-  The version of Alpine Linux used by the image (default `3.12.0`)
+  The version of Alpine Linux used by the image (defaults to `3.12.0`)
 * **`ALPINE_FLAVOUR`** \
-  The "flavour" of Alpine Linux used by the image (default `virt`)
+  The "flavour" of Alpine Linux used by the image (defaults to `virt`)
 
 The image will be built locally as `image/build/image.qcow2`. It will
 then be deployed to the OpenStack project as `osswarm-${ARCH}` (e.g.,
@@ -77,10 +79,12 @@ then be deployed to the OpenStack project as `osswarm-${ARCH}` (e.g.,
 The following Make variables are available to `infrastructure/Makefile`:
 
 * **`NAME`** \
-  The name used for the cluster infrastructure (defaults to current
+  The name used for the cluster infrastructure (defaults to the current
   username)
-
-<!-- Write me... -->
+* **`SECRET_KEY`** \
+  The path to an SSH secret key (defaults to any match of `~/.ssh/id_*`;
+  falling back to `~/.ssh/osswarm-${NAME}_rsa`, which will be generated
+  if it doesn't exist)
 
 <!-- ### Orchestration -->
 
@@ -94,11 +98,12 @@ The following *may* need to be changed for a general OpenStack cloud:
 ## To Do
 
 - [ ] Image
+  - [ ] Provisioning
+    - [ ] Cinder/S3 Docker volume drivers
   - [ ] Netdata configuration
     - [ ] Docker monitoring
     - [ ] Cluster monitoring
 - [ ] Infrastructure
-  - [ ] SSH key
   - [ ] Networking
     - [ ] Network
     - [ ] Floating IP
@@ -120,9 +125,11 @@ The following *may* need to be changed for a general OpenStack cloud:
 [docker]:              https://www.docker.com/
 [make]:                https://www.gnu.org/software/make
 [netdata]:             https://www.netdata.cloud/
+[openssh]:             https://www.openssh.com/
 [openstack-cli]:       https://docs.openstack.org/python-openstackclient
 [packer]:              https://www.packer.io/
 [qemu]:                https://www.qemu.org/
 [sanger]:              https://www.sanger.ac.uk/
 [terraform]:           https://www.terraform.io/
+[terraform-local]:     https://www.terraform.io/docs/providers/local/index.html
 [terraform-openstack]: https://registry.terraform.io/providers/terraform-provider-openstack/openstack

@@ -17,37 +17,37 @@ module "manager-to-manager" {
   source = "./swarm"
 
   cloud = var.cloud
-  from = openstack_networking_secgroup_v2.osswarm-manager.id
-  to = openstack_networking_secgroup_v2.osswarm-manager.id
+  from  = openstack_networking_secgroup_v2.osswarm-manager.id
+  to    = openstack_networking_secgroup_v2.osswarm-manager.id
 }
 
 module "manager-to-worker" {
   source = "./swarm"
 
   cloud = var.cloud
-  from = openstack_networking_secgroup_v2.osswarm-manager.id
-  to = openstack_networking_secgroup_v2.osswarm-worker.id
+  from  = openstack_networking_secgroup_v2.osswarm-manager.id
+  to    = openstack_networking_secgroup_v2.osswarm-worker.id
 }
 
 module "worker-to-manager" {
   source = "./swarm"
 
   cloud = var.cloud
-  from = openstack_networking_secgroup_v2.osswarm-worker.id
-  to = openstack_networking_secgroup_v2.osswarm-manager.id
+  from  = openstack_networking_secgroup_v2.osswarm-worker.id
+  to    = openstack_networking_secgroup_v2.osswarm-manager.id
 }
 
 module "worker-to-worker" {
   source = "./swarm"
 
   cloud = var.cloud
-  from = openstack_networking_secgroup_v2.osswarm-worker.id
-  to = openstack_networking_secgroup_v2.osswarm-worker.id
+  from  = openstack_networking_secgroup_v2.osswarm-worker.id
+  to    = openstack_networking_secgroup_v2.osswarm-worker.id
 }
 
 output "swarm" {
   value = {
     manager = openstack_networking_secgroup_v2.osswarm-manager.id
-    worker = openstack_networking_secgroup_v2.osswarm-worker.id
+    worker  = openstack_networking_secgroup_v2.osswarm-worker.id
   }
 }
