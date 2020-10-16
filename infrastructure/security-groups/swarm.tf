@@ -13,7 +13,6 @@ resource "openstack_networking_secgroup_v2" "osswarm-worker" {
 module "manager-to-worker" {
   source = "./swarm"
 
-  cloud = var.cloud
   from  = openstack_networking_secgroup_v2.osswarm-manager.id
   to    = openstack_networking_secgroup_v2.osswarm-worker.id
 }
@@ -21,7 +20,6 @@ module "manager-to-worker" {
 module "worker-to-manager" {
   source = "./swarm"
 
-  cloud = var.cloud
   from  = openstack_networking_secgroup_v2.osswarm-worker.id
   to    = openstack_networking_secgroup_v2.osswarm-manager.id
 }

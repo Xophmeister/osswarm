@@ -85,6 +85,11 @@ The following Make variables are available to `infrastructure/Makefile`:
   The path to an SSH secret key (defaults to any match of `~/.ssh/id_*`;
   falling back to `~/.ssh/osswarm-${NAME}_rsa`, which will be generated
   if it doesn't exist)
+* **`FLAVOUR`** \
+  The machine flavour for all nodes in the cluster (defaults to
+  `m2.medium`)
+* **`WORKERS`** \
+  The number of worker nodes in the cluster (defaults to 1)
 
 <!-- ### Orchestration -->
 
@@ -104,7 +109,6 @@ The following *may* need to be changed for a general OpenStack cloud:
     - [ ] Docker monitoring
     - [ ] Cluster monitoring
 - [ ] Infrastructure
-  - [ ] Compute
   - [ ] Load Balancer
   - [ ] DNS
 - [ ] Orchestration
