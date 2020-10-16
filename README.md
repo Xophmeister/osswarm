@@ -104,9 +104,6 @@ The following *may* need to be changed for a general OpenStack cloud:
     - [ ] Docker monitoring
     - [ ] Cluster monitoring
 - [ ] Infrastructure
-  - [ ] Networking
-    - [ ] Network
-    - [ ] Floating IP
   - [ ] Compute
   - [ ] Load Balancer
   - [ ] DNS

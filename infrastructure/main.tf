@@ -20,3 +20,19 @@ module "security-groups" {
   cloud   = var.cloud
   cluster = var.cluster
 }
+
+module "network" {
+  source = "./network"
+
+  cloud   = var.cloud
+  cluster = var.cluster
+}
+
+# TODO Needs an instance to attach to
+# module "floating-ip" {
+#   source = "./floating-ip"
+#
+#   cloud    = var.cloud
+#   cluster  = var.cluster
+#   instance = module.manager.id
+# }

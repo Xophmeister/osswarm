@@ -1,0 +1,2 @@
+variable cluster {}
+variable instance {}
