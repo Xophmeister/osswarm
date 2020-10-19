@@ -1,3 +1,9 @@
+variable "config" {
+  type        = string
+  description = "Infoblox configuration"
+  default     = "dns/infoblox.yaml"
+}
+
 variable "domain" {
   type        = string
   description = "Domain under which to expose the cluster"

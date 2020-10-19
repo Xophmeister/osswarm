@@ -4,23 +4,19 @@ Build and deploy a Docker Swarm cluster to OpenStack.
 
 ## Usage
 
+The [Infoblox][infoblox] configuration will first need to be defined in
+`infrastructure/dns/infoblox.yaml`. See [the example
+configuration](infrastructure/dns/infoblox.yaml.example) for details.
+
+Then, to build and deploy a Docker Swarm to the given OpenStack project,
+per the `clouds.yaml` configuration, setting DNS records under the given
+`${DOMAIN}`, run:
+
     make CLOUD=${OS_CLOUD} DOMAIN=${DOMAIN}
 
-Build and deploy a Docker Swarm to the given OpenStack project, per the
-`clouds.yaml` configuration, setting DNS records under the given
-`${DOMAIN}`. Other Make variables can be set to fine-tune the cluster;
-please see the appropriate [documentation](#build-process) below.
-
-The following environment variables must be set:
-
-* `**INFOBLOX_SERVER**` \
-  The address of the Infoblox service
-* `**INFOBLOX_USERNAME**` \
-  The Infoblox username
-* `**INFOBLOX_PASSWORD**` \
-  The Infoblox password
-
-Other Make targets are available:
+Other Make variables can be set to fine-tune the cluster; please see the
+appropriate [documentation](#build-process) below. The following
+additional Make targets are available:
 
 * **`cloud-clean`** \
   Destroy a deployed Docker Swarm and all its related infrastructure
@@ -118,8 +114,8 @@ The following *may* need to be changed for a general OpenStack cloud:
   Configures Docker's networking to avoid internal conflicts
 * **DNS** \
   DNS is provided by Infoblox and is defined in the following locations:
-  * **`Makefile` and `infrastructure/Makefile`** \
-    Checks for the Infoblox environment variables
+  * **`infrastructure/Makefile`** \
+    Checks for the Infoblox configuration
   * **`infrastructure/dns`** \
     Terraform module utilising the Infoblox provider
 
@@ -132,7 +128,6 @@ The following *may* need to be changed for a general OpenStack cloud:
     - [ ] Docker monitoring
     - [ ] Cluster monitoring
 - [ ] Infrastructure
-  - [ ] DNS (?)
   - [ ] Load Balancer (?)
 - [ ] Orchestration
   - [ ] Prometheus (Docker/Netdata monitoring)
@@ -147,6 +142,7 @@ The following *may* need to be changed for a general OpenStack cloud:
 [ansible]:             https://www.ansible.com/
 [cloud-init]:          https://cloud-init.io/
 [docker]:              https://www.docker.com/
+[infoblox]:            https://www.infoblox.com/
 [make]:                https://www.gnu.org/software/make
 [netdata]:             https://www.netdata.cloud/
 [openssh]:             https://www.openssh.com/
@@ -154,7 +150,7 @@ The following *may* need to be changed for a general OpenStack cloud:
 [packer]:              https://www.packer.io/
 [qemu]:                https://www.qemu.org/
 [sanger]:              https://www.sanger.ac.uk/
-[terraform]:           https://www.terraform.io/
-[terraform-local]:     https://www.terraform.io/docs/providers/local
 [terraform-infoblox]:  https://www.terraform.io/docs/providers/infoblox
+[terraform-local]:     https://www.terraform.io/docs/providers/local
 [terraform-openstack]: https://registry.terraform.io/providers/terraform-provider-openstack/openstack
+[terraform]:           https://www.terraform.io/

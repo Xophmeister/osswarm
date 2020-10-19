@@ -1,0 +1,5 @@
+server:   "infoblox.example.com"
+username: "foo"
+password: "bar"
+
+dns_view: "example"

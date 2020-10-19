@@ -14,17 +14,13 @@ PUBLIC_KEY = $(SECRET_KEY).pub
 FLAVOUR ?= m2.medium
 WORKERS ?= 1
 
-# FIXME This is for debugging
-INFOBLOX_SERVER = x
-INFOBLOX_USERNAME = x
-INFOBLOX_PASSWORD = x
-
+INFOBLOX_CONFIG       = dns/infoblox.yaml
 MANAGEMENT_SUBDOMAIN ?= management
 SERVICE_SUBDOMAIN    ?= services
 
 all: $(SOURCES) $(TERRAFORM_INIT) $(PUBLIC_KEY) apply
 
-apply destroy: check-CLOUD check-NAME check-IMAGE_NAME check-DOMAIN check-INFOBLOX_SERVER check-INFOBLOX_USERNAME check-INFOBLOX_PASSWORD
+apply destroy: check-CLOUD check-NAME check-IMAGE_NAME check-DOMAIN $(INFOBLOX_CONFIG)
 	$(TERRAFORM) $@ -var "cloud=$(CLOUD)" \
 	                -var "cluster=$(NAME)" \
 	                -var "key=$(PUBLIC_KEY)" \
@@ -39,6 +35,10 @@ apply destroy: check-CLOUD check-NAME check-IMAGE_NAME check-DOMAIN check-INFOBL
 $(TERRAFORM_INIT):
 	$(TERRAFORM) init
 
+$(INFOBLOX_CONFIG):
+	echo "Infoblox configuration does not exist; this must be set manually"
+	exit 1
+
 $(PUBLIC_KEY): $(SECRET_KEY)
 	$(KEYGEN) -yf $< > $@
 
@@ -52,3 +52,4 @@ clean: check-NAME
 cloud-clean: $(TERRAFORM_STATE) destroy
 
 .PHONY: all apply destroy clean cloud-clean
+.SILENT: $(INFOBLOX_CONFIG)

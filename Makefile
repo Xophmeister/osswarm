@@ -6,7 +6,7 @@ ARCH ?= x86_64
 # The image is the same, regardless of the name, so canonicalise it
 IMAGE_NAME = osswarm-$(ARCH)
 
-infrastructure: check-CLOUD check-DOMAIN check-INFOBLOX_SERVER check-INFOBLOX_USERNAME check-INFOBLOX_PASSWORD image
+infrastructure: check-CLOUD check-DOMAIN image
 	$(MAKE) -C $@
 
 image: check-CLOUD

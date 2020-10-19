@@ -117,19 +117,18 @@ module "ip" {
   # load-balancer = module.load-balancer.port
 }
 
-# TODO This does not work as expected...
-# module "dns" {
-#   source = "./dns"
-#
-#   domain = var.domain
-#
-#   management = {
-#     address   = module.ip.management
-#     subdomain = var.management-subdomain
-#   }
-#
-#   # service = {
-#   #   address   = module.ip.service
-#   #   subdomain = var.service-subdomain
-#   # }
-# }
+module "dns" {
+  source = "./dns"
+
+  domain = var.domain
+
+  management = {
+    address   = module.ip.management
+    subdomain = var.management-subdomain
+  }
+
+  # service = {
+  #   address   = module.ip.service
+  #   subdomain = var.service-subdomain
+  # }
+}
