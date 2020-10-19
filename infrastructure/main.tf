@@ -1,38 +1,40 @@
 ## Variables ###########################################################
 
 variable "cloud" {
+  type        = string
   description = "OpenStack cloud identifier, per clouds.yaml"
 }
 
 variable "cluster" {
+  type        = string
   description = "Name for the cluster infrastructure"
 }
 
 variable "key" {
+  type        = string
   description = "Path to a public key file, for which its private key must exist"
 }
 
 variable "image" {
+  type        = string
   description = "Base image for Docker Swarm nodes"
 }
 
 variable "flavour" {
+  type        = string
   description = "Machine flavour for Docker Swarm nodes"
 }
 
 variable "workers" {
+  type        = number
   description = "Number of worker nodes"
 }
 
-## Providers ###########################################################
-
-provider "local" {}
+## Infrastructure ######################################################
 
 provider "openstack" {
   cloud = var.cloud
 }
-
-## Infrastructure ######################################################
 
 module "ssh-key" {
   source = "./ssh-key"
@@ -53,44 +55,42 @@ module "network" {
   cluster = var.cluster
 }
 
-module "manager" {
-  source = "./instance"
+module "cluster" {
+  source = "./compute"
 
   cluster = var.cluster
   image   = var.image
   flavour = var.flavour
-  role    = "manager"
   ssh-key = module.ssh-key.name
   network = module.network.id
-  security-groups = [
-    module.security-groups.swarm.manager,
-    module.security-groups.ssh,
-    module.security-groups.netdata,
-    module.security-groups.services
-  ]
+  workers = var.workers
+
+  security-groups = {
+    manager = [
+      module.security-groups.swarm.manager,
+      module.security-groups.ssh,
+      module.security-groups.netdata,
+      module.security-groups.services
+    ]
+    worker = [
+      module.security-groups.swarm.worker,
+      module.security-groups.ssh,
+      module.security-groups.netdata,
+      module.security-groups.services
+    ]
+  }
 }
 
-module "workers" {
-  source = "./instance"
-  tally  = var.workers
+module "load-balancer" {
+  source = "./load-balancer"
 
   cluster = var.cluster
-  image   = var.image
-  flavour = var.flavour
-  role    = "worker"
-  ssh-key = module.ssh-key.name
-  network = module.network.id
-  security-groups = [
-    module.security-groups.swarm.worker,
-    module.security-groups.ssh,
-    module.security-groups.netdata,
-    module.security-groups.services
-  ]
 }
 
-module "floating-ip" {
+module "ip" {
   source = "./floating-ip"
 
-  cluster  = var.cluster
-  instance = module.manager.id[0]
+  cluster       = var.cluster
+  manager       = module.cluster.manager
+  load-balancer = module.load-balancer.port
 }

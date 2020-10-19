@@ -1,7 +1,7 @@
 resource "openstack_networking_secgroup_v2" "osswarm-netdata" {
-  name                  = "osswarm-${var.cluster}-netdata"
-  description           = "Netdata Access"
-  delete_default_rules  = true
+  name                 = "osswarm-${var.cluster}-netdata"
+  description          = "Netdata Access"
+  delete_default_rules = true
 }
 
 resource "openstack_networking_secgroup_rule_v2" "osswarm-netdata-dashboard-in" {

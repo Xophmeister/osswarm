@@ -1,5 +1,4 @@
-variable "cluster" {}
-variable "key" {}
+provider local {}
 
 data "local_file" "public_key" {
   filename = pathexpand(var.key)

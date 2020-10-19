@@ -1,7 +1,7 @@
 resource "openstack_networking_secgroup_v2" "osswarm-ssh" {
-  name                  = "osswarm-${var.cluster}-ssh"
-  description           = "SSH Access"
-  delete_default_rules  = true
+  name                 = "osswarm-${var.cluster}-ssh"
+  description          = "SSH Access"
+  delete_default_rules = true
 }
 
 resource "openstack_networking_secgroup_rule_v2" "osswarm-ssh-in" {

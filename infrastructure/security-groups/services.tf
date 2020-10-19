@@ -1,7 +1,7 @@
 resource "openstack_networking_secgroup_v2" "osswarm-services" {
-  name                  = "osswarm-${var.cluster}-services"
-  description           = "Container Access"
-  delete_default_rules  = true
+  name                 = "osswarm-${var.cluster}-services"
+  description          = "Container Access"
+  delete_default_rules = true
 }
 
 resource "openstack_networking_secgroup_rule_v2" "osswarm-containers-in" {

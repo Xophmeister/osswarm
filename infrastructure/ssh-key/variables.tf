@@ -3,8 +3,7 @@ variable "cluster" {
   description = "Name for the cluster infrastructure"
 }
 
-variable "subnet" {
+variable "key" {
   type        = string
-  description = "Subnet CIDR"
-  default     = "10.1.0.0/24"
+  description = "Path to a public key file, for which its private key must exist"
 }
