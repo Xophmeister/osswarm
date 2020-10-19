@@ -82,16 +82,18 @@ module "cluster" {
 
   security-groups = {
     manager = [
-      module.security-groups.swarm.manager,
-      module.security-groups.ssh,
+      module.security-groups.base,
       module.security-groups.netdata,
-      module.security-groups.services
+      module.security-groups.services,
+      module.security-groups.ssh,
+      module.security-groups.swarm.manager
     ]
     worker = [
-      module.security-groups.swarm.worker,
-      module.security-groups.ssh,
+      module.security-groups.base,
       module.security-groups.netdata,
-      module.security-groups.services
+      module.security-groups.services,
+      module.security-groups.ssh,
+      module.security-groups.swarm.worker
     ]
   }
 }
