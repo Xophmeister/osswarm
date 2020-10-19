@@ -1,7 +1,11 @@
 locals {
   management = "management"
   service    = "service"
-  role       = toset([local.management, local.service])
+
+  role = toset([
+    local.management,
+    # local.service
+  ])
 }
 
 data "openstack_networking_network_v2" "external" {

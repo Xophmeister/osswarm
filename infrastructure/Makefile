@@ -14,14 +14,27 @@ PUBLIC_KEY = $(SECRET_KEY).pub
 FLAVOUR ?= m2.medium
 WORKERS ?= 1
 
-all: check-CLOUD check-NAME check-IMAGE_NAME $(SOURCES) $(TERRAFORM_INIT) $(PUBLIC_KEY)
-	$(TERRAFORM) apply -var "cloud=$(CLOUD)" \
-	                   -var "cluster=$(NAME)" \
-	                   -var "key=$(PUBLIC_KEY)" \
-	                   -var "image=$(IMAGE_NAME)" \
-	                   -var "flavour=$(FLAVOUR)" \
-	                   -var "workers=$(WORKERS)" \
-	                   -auto-approve
+# FIXME This is for debugging
+INFOBLOX_SERVER = x
+INFOBLOX_USERNAME = x
+INFOBLOX_PASSWORD = x
+
+MANAGEMENT_SUBDOMAIN ?= management
+SERVICE_SUBDOMAIN    ?= services
+
+all: $(SOURCES) $(TERRAFORM_INIT) $(PUBLIC_KEY) apply
+
+apply destroy: check-CLOUD check-NAME check-IMAGE_NAME check-DOMAIN check-INFOBLOX_SERVER check-INFOBLOX_USERNAME check-INFOBLOX_PASSWORD
+	$(TERRAFORM) $@ -var "cloud=$(CLOUD)" \
+	                -var "cluster=$(NAME)" \
+	                -var "key=$(PUBLIC_KEY)" \
+	                -var "image=$(IMAGE_NAME)" \
+	                -var "flavour=$(FLAVOUR)" \
+	                -var "workers=$(WORKERS)" \
+	                -var "domain=$(DOMAIN)" \
+	                -var "management-subdomain=$(MANAGEMENT_SUBDOMAIN)" \
+	                -var "service-subdomain=$(SERVICE_SUBDOMAIN)" \
+	                -auto-approve
 
 $(TERRAFORM_INIT):
 	$(TERRAFORM) init
@@ -36,13 +49,6 @@ $(SECRET_KEY):
 clean: check-NAME
 	rm -rf $(TERRAFORM_INIT) $(TERRAFORM_STATE) $(BACKUP_KEY)
 
-cloud-clean: check-CLOUD check-NAME check-IMAGE_NAME $(TERRAFORM_STATE)
-	$(TERRAFORM) destroy -var "cloud=$(CLOUD)" \
-	                     -var "cluster=$(NAME)" \
-	                     -var "key=$(PUBLIC_KEY)" \
-	                     -var "image=$(IMAGE_NAME)" \
-	                     -var "flavour=$(FLAVOUR)" \
-	                     -var "workers=$(WORKERS)" \
-	                     -auto-approve
+cloud-clean: $(TERRAFORM_STATE) destroy
 
-.PHONY: all clean cloud-clean
+.PHONY: all apply destroy clean cloud-clean

@@ -4,12 +4,21 @@ Build and deploy a Docker Swarm cluster to OpenStack.
 
 ## Usage
 
-    make CLOUD=${OS_CLOUD}
+    make CLOUD=${OS_CLOUD} DOMAIN=${DOMAIN}
 
 Build and deploy a Docker Swarm to the given OpenStack project, per the
-`clouds.yaml` configuration. Other Make variables can be set to
-fine-tune the cluster; please see the appropriate
-[documentation](#build-process) below.
+`clouds.yaml` configuration, setting DNS records under the given
+`${DOMAIN}`. Other Make variables can be set to fine-tune the cluster;
+please see the appropriate [documentation](#build-process) below.
+
+The following environment variables must be set:
+
+* `**INFOBLOX_SERVER**` \
+  The address of the Infoblox service
+* `**INFOBLOX_USERNAME**` \
+  The Infoblox username
+* `**INFOBLOX_PASSWORD**` \
+  The Infoblox password
 
 Other Make targets are available:
 
@@ -48,6 +57,8 @@ cloud-clean` is manually invoked.
   * Terraform [OpenStack provider][terraform-openstack] (tested with
     1.32.0)
   * Terraform [local provider][terraform-local] (tested with 2.0.0)
+  * Terraform [Infoblox provider][terraform-infoblox] (tested with
+    1.1.0)
 
 ## Build Process
 
@@ -90,6 +101,12 @@ The following Make variables are available to `infrastructure/Makefile`:
   `m2.medium`)
 * **`WORKERS`** \
   The number of worker nodes in the cluster (defaults to 1)
+* **`MANAGEMENT_SUBDOMAIN`** \
+  The subdomain from which to manage the cluster (defaults to
+  `management`)
+* **`SERVICE_SUBDOMAIN`** \
+  The subdomain from which to access cluster services (defaults to
+  `services`)
 
 <!-- ### Orchestration -->
 
@@ -99,6 +116,12 @@ The following *may* need to be changed for a general OpenStack cloud:
 
 * **`image/src/docker.json`** \
   Configures Docker's networking to avoid internal conflicts
+* **DNS** \
+  DNS is provided by Infoblox and is defined in the following locations:
+  * **`Makefile` and `infrastructure/Makefile`** \
+    Checks for the Infoblox environment variables
+  * **`infrastructure/dns`** \
+    Terraform module utilising the Infoblox provider
 
 ## To Do
 
@@ -109,8 +132,8 @@ The following *may* need to be changed for a general OpenStack cloud:
     - [ ] Docker monitoring
     - [ ] Cluster monitoring
 - [ ] Infrastructure
-  - [ ] Load Balancer
-  - [ ] DNS
+  - [ ] DNS (?)
+  - [ ] Load Balancer (?)
 - [ ] Orchestration
   - [ ] Prometheus (Docker/Netdata monitoring)
   - [ ] Swarm manager
@@ -132,5 +155,6 @@ The following *may* need to be changed for a general OpenStack cloud:
 [qemu]:                https://www.qemu.org/
 [sanger]:              https://www.sanger.ac.uk/
 [terraform]:           https://www.terraform.io/
-[terraform-local]:     https://www.terraform.io/docs/providers/local/index.html
+[terraform-local]:     https://www.terraform.io/docs/providers/local
+[terraform-infoblox]:  https://www.terraform.io/docs/providers/infoblox
 [terraform-openstack]: https://registry.terraform.io/providers/terraform-provider-openstack/openstack

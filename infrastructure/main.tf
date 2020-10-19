@@ -30,6 +30,21 @@ variable "workers" {
   description = "Number of worker nodes"
 }
 
+variable "domain" {
+  type        = string
+  description = "Domain under which to expose the cluster"
+}
+
+variable "management-subdomain" {
+  type        = string
+  description = "Subdomain under which to expose management access"
+}
+
+variable "service-subdomain" {
+  type        = string
+  description = "Subdomain under which to expose service access"
+}
+
 ## Infrastructure ######################################################
 
 provider "openstack" {
@@ -101,3 +116,20 @@ module "ip" {
   manager       = module.cluster.manager
   # load-balancer = module.load-balancer.port
 }
+
+# TODO This does not work as expected...
+# module "dns" {
+#   source = "./dns"
+#
+#   domain = var.domain
+#
+#   management = {
+#     address   = module.ip.management
+#     subdomain = var.management-subdomain
+#   }
+#
+#   # service = {
+#   #   address   = module.ip.service
+#   #   subdomain = var.service-subdomain
+#   # }
+# }
