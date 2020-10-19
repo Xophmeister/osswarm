@@ -81,16 +81,23 @@ module "cluster" {
   }
 }
 
-module "load-balancer" {
-  source = "./load-balancer"
-
-  cluster = var.cluster
-}
+# TODO This does not work as expected...
+# module "load-balancer" {
+#   source = "./load-balancer"
+#
+#   cluster = var.cluster
+#   network = module.network.id
+#   nodes   = module.cluster.nodes
+#
+#   security-groups = [
+#     module.security-groups.services
+#   ]
+# }
 
 module "ip" {
   source = "./floating-ip"
 
   cluster       = var.cluster
   manager       = module.cluster.manager
-  load-balancer = module.load-balancer.port
+  # load-balancer = module.load-balancer.port
 }

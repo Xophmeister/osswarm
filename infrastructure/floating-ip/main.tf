@@ -20,7 +20,7 @@ resource "openstack_compute_floatingip_associate_v2" "management-ip" {
 }
 
 # resource "openstack_networking_floatingip_associate_v2" "service-ip" {
-#   floating_ip = openstack_networking_network_v2.ip[local.service].address
+#   floating_ip = openstack_networking_floatingip_v2.ip[local.service].address
 #   port_id     = var.load-balancer
 # }
 

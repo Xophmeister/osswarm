@@ -8,7 +8,9 @@ variable "manager" {
   description = "Manager instance ID"
 }
 
+# TODO
 variable "load-balancer" {
   type        = string
   description = "Load balancer port"
+  default     = "TODO..."
 }
