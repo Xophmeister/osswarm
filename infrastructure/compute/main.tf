@@ -8,7 +8,7 @@ module "manager" {
 
   image           = var.image
   flavour         = var.flavour
-  name            = "osswarm-manager"
+  name            = "osswarm-${var.cluster}-manager"
   server-group    = openstack_compute_servergroup_v2.server-group.id
   ssh-key         = var.ssh-key
   network         = var.network
@@ -22,7 +22,7 @@ module "worker" {
 
   image           = var.image
   flavour         = var.flavour
-  name            = "osswarm-worker-${format("%02d", count.index + 1)}"
+  name            = "osswarm-${var.cluster}-worker-${format("%02d", count.index + 1)}"
   server-group    = openstack_compute_servergroup_v2.server-group.id
   ssh-key         = var.ssh-key
   network         = var.network

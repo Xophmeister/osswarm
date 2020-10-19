@@ -10,6 +10,7 @@ resource "openstack_networking_secgroup_v2" "osswarm-worker" {
   delete_default_rules = true
 }
 
+# TODO Use for_each here?
 module "manager-to-worker" {
   source = "./swarm"
 
