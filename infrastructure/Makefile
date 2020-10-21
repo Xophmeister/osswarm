@@ -15,8 +15,8 @@ FLAVOUR ?= m2.medium
 WORKERS ?= 1
 
 INFOBLOX_CONFIG       = dns/infoblox.yaml
-MANAGEMENT_SUBDOMAIN ?= management
-SERVICE_SUBDOMAIN    ?= services
+MANAGEMENT_SUBDOMAIN ?= management.osswarm-$(NAME)
+SERVICE_SUBDOMAIN    ?= services.osswarm-$(NAME)
 
 all: $(SOURCES) $(TERRAFORM_INIT) $(PUBLIC_KEY) apply
 

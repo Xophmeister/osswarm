@@ -18,7 +18,7 @@ module "manager" {
 
 module "worker" {
   source = "./instance"
-  count  = min(var.workers, 255) # Don't overshoot the /24 block
+  count  = min(var.workers, 254) # 254 workers + 1 manager + 1 load balancer = /24 block
 
   image           = var.image
   flavour         = var.flavour

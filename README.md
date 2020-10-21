@@ -9,8 +9,8 @@ The [Infoblox][infoblox] configuration will first need to be defined in
 configuration](infrastructure/dns/infoblox.yaml.example) for details.
 
 Then, to build and deploy a Docker Swarm to the given OpenStack project,
-per the `clouds.yaml` configuration, setting DNS records under the given
-`${DOMAIN}`, run:
+per the `~/.config/openstack/clouds.yaml` configuration, setting DNS
+records under the given `${DOMAIN}`, run:
 
     make CLOUD=${OS_CLOUD} DOMAIN=${DOMAIN}
 
@@ -81,6 +81,11 @@ The image will be built locally as `image/build/image.qcow2`. It will
 then be deployed to the OpenStack project as `osswarm-${ARCH}` (e.g.,
 `osswarm-x86_64`).
 
+SSH access to the booted image is controlled by `cloud-init`, under the
+`alpine` user. Root SSH access is forbidden, but direct root access is
+available from, for example, the OpenStack console, with the password
+`alpine`.
+
 ### Infrastructure
 
 The following Make variables are available to `infrastructure/Makefile`:
@@ -99,10 +104,10 @@ The following Make variables are available to `infrastructure/Makefile`:
   The number of worker nodes in the cluster (defaults to 1)
 * **`MANAGEMENT_SUBDOMAIN`** \
   The subdomain from which to manage the cluster (defaults to
-  `management`)
+  `management.osswarm-${NAME}`)
 * **`SERVICE_SUBDOMAIN`** \
   The subdomain from which to access cluster services (defaults to
-  `services`)
+  `services.osswarm-${NAME}`)
 
 <!-- ### Orchestration -->
 
@@ -118,6 +123,13 @@ The following *may* need to be changed for a general OpenStack cloud:
     Checks for the Infoblox configuration
   * **`infrastructure/dns`** \
     Terraform module utilising the Infoblox provider
+
+## Acknowledgements
+
+Thanks, as always, to Sanger's [Informatics Support Group][sanger-isg]
+as custodians of OpenStack. Particularly to James Beal, Dave Holland and
+Jon Nicholson for their help regarding the finer points of
+virtualisation and networking infrastructure.
 
 ## To Do
 
@@ -148,6 +160,7 @@ The following *may* need to be changed for a general OpenStack cloud:
 [packer]:              https://www.packer.io/
 [qemu]:                https://www.qemu.org/
 [sanger]:              https://www.sanger.ac.uk/
+[sanger-isg]:          https://www.sanger.ac.uk/group/informatics-support-group
 [terraform-infoblox]:  https://www.terraform.io/docs/providers/infoblox
 [terraform-local]:     https://www.terraform.io/docs/providers/local
 [terraform-openstack]: https://registry.terraform.io/providers/terraform-provider-openstack/openstack
