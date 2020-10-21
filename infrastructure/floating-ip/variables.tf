@@ -8,7 +8,7 @@ variable "manager" {
   description = "Manager instance ID"
 }
 
-# variable "load-balancer" {
-#   type        = string
-#   description = "Load balancer port"
-# }
+variable "load-balancer" {
+  type        = string
+  description = "Load balancer port"
+}

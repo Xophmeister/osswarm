@@ -48,7 +48,8 @@ variable "service-subdomain" {
 ## Infrastructure ######################################################
 
 provider "openstack" {
-  cloud = var.cloud
+  cloud       = var.cloud
+  use_octavia = true
 }
 
 module "ssh-key" {
@@ -98,25 +99,22 @@ module "cluster" {
   }
 }
 
-# TODO This does not work as expected...
-# module "load-balancer" {
-#   source = "./load-balancer"
-#
-#   cluster = var.cluster
-#   network = module.network.id
-#   nodes   = module.cluster.nodes
-#
-#   security-groups = [
-#     module.security-groups.services
-#   ]
-# }
+module "load-balancer" {
+  source = "./load-balancer"
+
+  cluster    = var.cluster
+  network    = module.network.id
+  subnet     = module.network.subnet
+  node-count = var.workers + 1
+  nodes      = module.cluster.nodes
+}
 
 module "ip" {
   source = "./floating-ip"
 
   cluster       = var.cluster
   manager       = module.cluster.manager
-  # load-balancer = module.load-balancer.port
+  load-balancer = module.load-balancer.port
 }
 
 module "dns" {
@@ -129,8 +127,8 @@ module "dns" {
     subdomain = var.management-subdomain
   }
 
-  # service = {
-  #   address   = module.ip.service
-  #   subdomain = var.service-subdomain
-  # }
+  service = {
+    address   = module.ip.service
+    subdomain = var.service-subdomain
+  }
 }

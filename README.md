@@ -127,8 +127,6 @@ The following *may* need to be changed for a general OpenStack cloud:
   - [ ] Netdata configuration
     - [ ] Docker monitoring
     - [ ] Cluster monitoring
-- [ ] Infrastructure
-  - [ ] Load Balancer (?)
 - [ ] Orchestration
   - [ ] Prometheus (Docker/Netdata monitoring)
   - [ ] Swarm manager

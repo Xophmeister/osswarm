@@ -9,7 +9,7 @@ locals {
 
   role = {
     management = var.management
-    # service    = var.service
+    service    = var.service
   }
 
   tenant = split(var.domain, ".")[0]

@@ -1,7 +1,13 @@
 resource "openstack_lb_loadbalancer_v2" "load-balancer" {
-  name               = "osswarm-${var.cluster}"
-  vip_network_id     = var.network
-  security_group_ids = var.security-groups
+  name           = "osswarm-${var.cluster}"
+  vip_network_id = var.network
+  vip_subnet_id  = var.subnet
+}
+
+resource "openstack_lb_listener_v2" "listener" {
+  protocol        = "TCP"
+  protocol_port   = 80
+  loadbalancer_id = openstack_lb_loadbalancer_v2.load-balancer.id
 }
 
 resource "openstack_lb_pool_v2" "pool" {
@@ -14,16 +20,14 @@ resource "openstack_lb_pool_v2" "pool" {
   }
 }
 
-# FIXME
-# * for_each cannot depend on resources that are yet to be determined;
-#   to get around this, the deployment must be compartmentalised
-# * A load balancer member can only listen on one port, rather than a
-#   range... This needs more thought
 resource "openstack_lb_member_v2" "member" {
-  for_each = toset(var.nodes)
+  # Terraform's static analysis is not clever enough to realise that the
+  # size of var.nodes is deterministic. As such, we can't use for_each
+  # and instead have to help Terraform out with an explicit count
+  count = var.node-count
 
   pool_id       = openstack_lb_pool_v2.pool.id
-  address       = each.value
+  address       = var.nodes[count.index]
   protocol_port = 8080
 }
 

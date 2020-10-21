@@ -14,7 +14,7 @@ variable "management" {
   description = "Management DNS configuration"
 }
 
-# variable "service" {
-#   type        = object({ address = string, subdomain = string })
-#   description = "Service DNS configuration"
-# }
+variable "service" {
+  type        = object({ address = string, subdomain = string })
+  description = "Service DNS configuration"
+}
