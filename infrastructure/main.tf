@@ -132,6 +132,10 @@ module "management-load-balancer" {
   # SSH access
   listen-port = 22
   route-port  = 22
+  security-groups = [
+    module.security-groups.base,
+    module.security-groups.ssh
+  ]
 
   node-count = local.managers
   nodes      = module.cluster.managers.*.address
@@ -148,6 +152,9 @@ module "service-load-balancer" {
   # HTTP access routed internally to :8080
   listen-port = 80
   route-port  = 8080
+  security-groups = [
+    module.security-groups.base
+  ]
 
   node-count = local.nodes
   nodes      = concat(module.cluster.managers.*.address,

@@ -123,9 +123,9 @@ The following *may* need to be changed for a general OpenStack cloud:
 * **`image/src/docker.json`** \
   Configures Docker's networking to avoid internal conflicts
 * **Fault Tolerance** \
-  Partitioning is simulated using hypervisor affinity, distributing over
-  availability zones is preferable, if supported; see the
-  `infrastructure/compute` Terraform module for details
+  Partitioning is simulated using hypervisor affinity (see the
+  `infrastructure/compute` Terraform module for details); distribution
+  over availability zones is preferable, if supported
 * **DNS** \
   DNS is provided by Infoblox and is defined in the following locations:
   * **`infrastructure/Makefile`** \

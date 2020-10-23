@@ -28,6 +28,11 @@ variable "route-port" {
   description = "Port to which to route"
 }
 
+variable "security-groups" {
+  type        = list(string)
+  description = "Security group IDs"
+}
+
 variable "node-count" {
   type        = number
   description = "Number of nodes over which to balance"

@@ -10,24 +10,30 @@ resource "openstack_networking_secgroup_v2" "osswarm-worker" {
   delete_default_rules = true
 }
 
-# TODO Use for_each here?
-module "manager-to-worker" {
-  source = "./swarm"
+locals {
+  manager = openstack_networking_secgroup_v2.osswarm-manager.id
+  worker  = openstack_networking_secgroup_v2.osswarm-worker.id
 
-  from = openstack_networking_secgroup_v2.osswarm-manager.id
-  to   = openstack_networking_secgroup_v2.osswarm-worker.id
+  # We wouldn't want workers talking to other workers now, would we?!
+  bidirectional = [
+    { from = local.manager, to = local.manager },
+    { from = local.manager, to = local.worker  },
+    { from = local.worker,  to = local.manager },
+  ]
 }
 
-module "worker-to-manager" {
+module "swarm-rules" {
+  # Even this is too much for Terraform's for_each!
   source = "./swarm"
+  count  = 3
 
-  from = openstack_networking_secgroup_v2.osswarm-worker.id
-  to   = openstack_networking_secgroup_v2.osswarm-manager.id
+  from = local.bidirectional[count.index].from
+  to   = local.bidirectional[count.index].to
 }
 
 output "swarm" {
   value = {
-    manager = openstack_networking_secgroup_v2.osswarm-manager.id
-    worker  = openstack_networking_secgroup_v2.osswarm-worker.id
+    manager = local.manager
+    worker  = local.worker
   }
 }

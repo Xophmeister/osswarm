@@ -1,7 +1,8 @@
 resource "openstack_lb_loadbalancer_v2" "load-balancer" {
-  name           = "osswarm-${var.cluster}-${var.role}"
-  vip_network_id = var.network
-  vip_subnet_id  = var.subnet
+  name               = "osswarm-${var.cluster}-${var.role}"
+  vip_network_id     = var.network
+  vip_subnet_id      = var.subnet
+  security_group_ids = var.security-groups
 }
 
 resource "openstack_lb_listener_v2" "listener" {

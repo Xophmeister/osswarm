@@ -1,5 +1,6 @@
 # In the absence of availability zones, we use hypervisor affinity to
 # simulate partitioning for fault tolerance
+# TODO Switch to strict anti-affinity when resource is available
 resource "openstack_compute_servergroup_v2" "manager-group" {
   name     = "osswarm-${var.cluster}-managers"
   policies = ["soft-anti-affinity"]
