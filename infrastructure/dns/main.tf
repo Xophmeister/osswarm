@@ -1,24 +1,18 @@
-provider local {}
-
-data "local_file" "infoblox_config" {
-  filename = pathexpand(var.config)
-}
-
 locals {
-  config = yamldecode(data.local_file.infoblox_config.content)
+  config = yamldecode(file(var.config))
 
   role = {
     management = var.management
     service    = var.service
   }
 
-  tenant = split(var.domain, ".")[0]
+  tenant = try(local.config.tenant, split(var.domain, ".")[0])
 }
 
-provider infoblox {
-  server   = local.config["server"]
-  username = local.config["username"]
-  password = local.config["password"]
+provider "infoblox" {
+  server   = local.config.server
+  username = local.config.username
+  password = local.config.password
 }
 
 resource "infoblox_a_record" "record" {
@@ -26,7 +20,7 @@ resource "infoblox_a_record" "record" {
 
   tenant_id = local.tenant
   zone      = var.domain
-  dns_view  = local.config["dns_view"]
+  dns_view  = local.config.dns_view
 
   vm_name = each.value.subdomain
   ip_addr = each.value.address

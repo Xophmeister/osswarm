@@ -2,4 +2,5 @@ server:   "infoblox.example.com"
 username: "foo"
 password: "bar"
 
+tenant:   "example"  # Optional; defaults to the leaf subdomain
 dns_view: "example"
