@@ -8,15 +8,16 @@ SOURCES = $(shell find . -type f -name "*.tf")
 
 KEYGEN = ssh-keygen
 BACKUP_KEY = ~/.ssh/osswarm-$(NAME)_rsa
-SECRET_KEY ?= $(word 1,$(wildcard ~/.ssh/id_*) $(BACKUP_KEY))
+SECRET_KEY ?= $(word 1,$(shell find ~/.ssh -type f -name "id_*") $(BACKUP_KEY))
 PUBLIC_KEY = $(SECRET_KEY).pub
 
 FLAVOUR ?= m2.medium
+FAULT_TOLERANCE ?= 0
 WORKERS ?= 1
 
-INFOBLOX_CONFIG       = dns/infoblox.yaml
+INFOBLOX_CONFIG = dns/infoblox.yaml
 MANAGEMENT_SUBDOMAIN ?= management.osswarm-$(NAME)
-SERVICE_SUBDOMAIN    ?= services.osswarm-$(NAME)
+SERVICE_SUBDOMAIN ?= services.osswarm-$(NAME)
 
 all: $(SOURCES) $(TERRAFORM_INIT) $(PUBLIC_KEY) apply
 
@@ -26,6 +27,7 @@ apply destroy: check-CLOUD check-NAME check-IMAGE_NAME check-DOMAIN $(INFOBLOX_C
 	                -var "key=$(PUBLIC_KEY)" \
 	                -var "image=$(IMAGE_NAME)" \
 	                -var "flavour=$(FLAVOUR)" \
+	                -var "fault-tolerance=$(FAULT_TOLERANCE)" \
 	                -var "workers=$(WORKERS)" \
 	                -var "domain=$(DOMAIN)" \
 	                -var "management-subdomain=$(MANAGEMENT_SUBDOMAIN)" \

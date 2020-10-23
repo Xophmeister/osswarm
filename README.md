@@ -37,6 +37,8 @@ made to synchronise these. For example, once an image is deployed,
 changes to its sources will not trigger a full rebuild until `make
 cloud-clean` is manually invoked.
 
+<!-- ## Appliance -->
+<!-- ## Deploying to the Cluster -->
 <!-- ## Monitoring -->
 
 ## Dependencies
@@ -49,7 +51,7 @@ cloud-clean` is manually invoked.
 * [Ansible][ansible] (tested with 2.9.13)
   * Ansible [`community.general` modules][ansible-modules] (tested with
     1.2.0)
-* [Terraform][terraform] (tested with 0.13.4)
+* [Terraform][terraform] (tested with 0.13.5)
   * Terraform [OpenStack provider][terraform-openstack] (tested with
     1.32.0)
   * Terraform [local provider][terraform-local] (tested with 2.0.0)
@@ -100,6 +102,9 @@ The following Make variables are available to `infrastructure/Makefile`:
 * **`FLAVOUR`** \
   The machine flavour for all nodes in the cluster (defaults to
   `m2.medium`)
+* **`FAULT_TOLERANCE`** \
+  The number of faults that can be tolerated by the cluster (defaults to
+  0, maximum of 3)
 * **`WORKERS`** \
   The number of worker nodes in the cluster (defaults to 1)
 * **`MANAGEMENT_SUBDOMAIN`** \
@@ -117,6 +122,10 @@ The following *may* need to be changed for a general OpenStack cloud:
 
 * **`image/src/docker.json`** \
   Configures Docker's networking to avoid internal conflicts
+* **Fault Tolerance** \
+  Partitioning is simulated using hypervisor affinity, distributing over
+  availability zones is preferable, if supported; see the
+  `infrastructure/compute` Terraform module for details
 * **DNS** \
   DNS is provided by Infoblox and is defined in the following locations:
   * **`infrastructure/Makefile`** \
@@ -128,23 +137,42 @@ The following *may* need to be changed for a general OpenStack cloud:
 
 Thanks, as always, to Sanger's [Informatics Support Group][sanger-isg]
 as custodians of OpenStack. Particularly to James Beal, Dave Holland and
-Jon Nicholson for their help regarding the finer points of
-virtualisation and networking infrastructure.
+Jon Nicholson, in this instance, for their help regarding the finer
+points of virtualisation and networking infrastructure.
 
 ## To Do
-
 - [ ] Image
+  - [x] Bootstrapping
   - [ ] Provisioning
-    - [ ] Cinder/S3 Docker volume drivers
+    - [x] `cloud-init`
+    - [x] Netdata
+    - [ ] Docker
+      - [x] Docker
+      - [ ] Python library
+      - [ ] Docker Compose (?)
+    - [ ] Stretch: Cinder/S3 Docker volume drivers
+  - [x] `cloud-init` configuration
   - [ ] Netdata configuration
     - [ ] Docker monitoring
     - [ ] Cluster monitoring
+  - [x] Docker configuration
+- [ ] Infrastructure
+  - [x] SSH key
+  - [x] Networking
+    - [x] Network
+    - [x] Security groups
+    - [x] Load Balancer
+    - [x] Floating IP
+    - [x] DNS
+  - [x] Compute
+  - [ ] Stretch: Fault tolerance
 - [ ] Orchestration
   - [ ] Prometheus (Docker/Netdata monitoring)
   - [ ] Swarm manager
   - [ ] Swarm workers
-  - [ ] Traefik
+  - [ ] Traefik (?)
 - [ ] Documentation
+- [ ] Stretch: Refactoring
 
 <!-- References -->
 [alpine]:              https://alpinelinux.org/

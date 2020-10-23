@@ -23,6 +23,11 @@ variable "network" {
   description = "Network to which to attach the compute nodes"
 }
 
+variable "managers" {
+  type        = number
+  description = "Number of manager nodes"
+}
+
 variable "workers" {
   type        = number
   description = "Number of worker nodes"

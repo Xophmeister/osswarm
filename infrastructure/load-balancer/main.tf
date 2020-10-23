@@ -1,12 +1,12 @@
 resource "openstack_lb_loadbalancer_v2" "load-balancer" {
-  name           = "osswarm-${var.cluster}"
+  name           = "osswarm-${var.cluster}-${var.role}"
   vip_network_id = var.network
   vip_subnet_id  = var.subnet
 }
 
 resource "openstack_lb_listener_v2" "listener" {
   protocol        = "TCP"
-  protocol_port   = 80
+  protocol_port   = var.listen-port
   loadbalancer_id = openstack_lb_loadbalancer_v2.load-balancer.id
 }
 
@@ -15,9 +15,7 @@ resource "openstack_lb_pool_v2" "pool" {
   protocol        = "TCP"
   lb_method       = "ROUND_ROBIN"
 
-  persistence {
-    type = "SOURCE_IP"
-  }
+  persistence { type = "SOURCE_IP" }
 }
 
 resource "openstack_lb_member_v2" "member" {
@@ -28,7 +26,7 @@ resource "openstack_lb_member_v2" "member" {
 
   pool_id       = openstack_lb_pool_v2.pool.id
   address       = var.nodes[count.index]
-  protocol_port = 8080
+  protocol_port = var.route-port
 }
 
 output "port" {

@@ -1,39 +1,47 @@
-resource "openstack_compute_servergroup_v2" "server-group" {
-  name     = "osswarm-${var.cluster}"
+# In the absence of availability zones, we use hypervisor affinity to
+# simulate partitioning for fault tolerance
+resource "openstack_compute_servergroup_v2" "manager-group" {
+  name     = "osswarm-${var.cluster}-managers"
   policies = ["soft-anti-affinity"]
 }
 
-module "manager" {
+resource "openstack_compute_servergroup_v2" "worker-group" {
+  name     = "osswarm-${var.cluster}-workers"
+  policies = ["soft-anti-affinity"]
+}
+
+module "managers" {
   source = "./instance"
+  count  = var.managers
 
   image           = var.image
   flavour         = var.flavour
-  name            = "osswarm-${var.cluster}-manager"
-  server-group    = openstack_compute_servergroup_v2.server-group.id
+  name            = "osswarm-${var.cluster}-manager-${format("%02d", count.index + 1)}"
+  server-group    = openstack_compute_servergroup_v2.manager-group.id
   ssh-key         = var.ssh-key
   network         = var.network
   metadata        = { "role" = "manager" }
   security-groups = var.security-groups.manager
 }
 
-module "worker" {
+module "workers" {
   source = "./instance"
-  count  = min(var.workers, 254) # 254 workers + 1 manager + 1 load balancer = /24 block
+  count  = var.workers
 
   image           = var.image
   flavour         = var.flavour
   name            = "osswarm-${var.cluster}-worker-${format("%02d", count.index + 1)}"
-  server-group    = openstack_compute_servergroup_v2.server-group.id
+  server-group    = openstack_compute_servergroup_v2.worker-group.id
   ssh-key         = var.ssh-key
   network         = var.network
   metadata        = { "role" = "worker" }
   security-groups = var.security-groups.worker
 }
 
-output "manager" {
-  value = module.manager.id
+output "managers" {
+  value = module.managers
 }
 
-output "nodes" {
-  value = concat([module.manager.address], module.worker.*.address)
+output "workers" {
+  value = module.workers
 }

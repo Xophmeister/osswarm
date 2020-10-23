@@ -3,12 +3,17 @@ variable "cluster" {
   description = "Name for the cluster infrastructure"
 }
 
-variable "manager" {
-  type        = string
-  description = "Manager instance ID"
+variable "fault-tolerant" {
+  type        = bool
+  description = "Whether management is fault tolerant"
 }
 
-variable "load-balancer" {
+variable "manager" {
   type        = string
-  description = "Load balancer port"
+  description = "Manager load balancer port or instance ID"
+}
+
+variable "services" {
+  type        = string
+  description = "Services load balancer port"
 }
